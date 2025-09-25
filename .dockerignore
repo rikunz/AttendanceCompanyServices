@@ -1,0 +1,68 @@
+# Git
+.git
+.gitignore
+README.md
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env
+pip-log.txt
+pip-delete-this-directory.txt
+.tox
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.mypy_cache
+.pytest_cache
+.hypothesis
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+__pypackages__
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+logs/*
+!logs/.gitkeep
+docs/api-docs.html
+.deepface
+*.tmp
+test.py
+images/
+
+# Docker files
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Large model files (will be downloaded at runtime)
+*.onnx
+*.pb
+*.h5
+*.pkl
+*.bin
+*.safetensors

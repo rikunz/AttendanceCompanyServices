@@ -1,0 +1,3 @@
+BACKEND_DEEPFACE='mtcnn'
+MODEL_NAME='Facenet512'
+DISTANCE_METRIC='cosine'

@@ -1,0 +1,11 @@
+name: Attendance Service
+services:
+  deepface-api:
+    build: .
+    # environment:
+    #   - DEEPFACE_HOME=$pwd
+    #   - FIREBASE_CREDENTIAL=.json
+    env_file:
+      - ./.env
+    volumes:
+      - ./logs:/app/logs

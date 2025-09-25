@@ -1,0 +1,456 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "DeepFace Attendance Service API",
+        "description": "Enterprise-grade facial recognition service for attendance management systems. Powered by DeepFace with anti-spoofing protection and Firebase integration.",
+        "version": "1.0.0",
+        "contact": {
+            "name": "API Support",
+            "email": "support@your-company.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:5000",
+            "description": "Local server"
+        }
+    ],
+    "paths": {
+        "/api/users/face-embedding": {
+            "get": {
+                "summary": "Get User Face Embedding",
+                "description": "Retrieve the face embedding for a user based on the session cookie.",
+                "tags": [
+                    "Face Management"
+                ],
+                "security": [
+                    {
+                        "sessionCookie": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of face embedding.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "boolean"
+                                        },
+                                        "face_embedding": {
+                                            "type": [
+                                                "array",
+                                                "null"
+                                            ],
+                                            "items": {
+                                                "type": "number"
+                                            },
+                                            "nullable": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Invalid session.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error - Error retrieving user data.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Register/Update User Face Embedding",
+                "description": "Register or update the face embedding for a user. Includes anti-spoofing detection and validation.",
+                "tags": [
+                    "Face Management"
+                ],
+                "security": [
+                    {
+                        "sessionCookie": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "face_image": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "description": "Face image file for enrollment. Should contain a single, clear face."
+                                    }
+                                },
+                                "required": [
+                                    "face_image"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful upsert of face embedding.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Spoof detected in the given image.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Invalid session.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error - Error upserting user face embedding or unexpected error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/verify-face": {
+            "post": {
+                "summary": "Verify Face for Attendance",
+                "description": "Verify a user's face for attendance check-in/check-out. Compares against stored face embedding with anti-spoofing protection.",
+                "tags": [
+                    "Attendance Verification"
+                ],
+                "security": [
+                    {
+                        "sessionCookie": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "face_image": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "description": "Face image file to verify."
+                                    }
+                                },
+                                "required": [
+                                    "face_image"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful face verification.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "boolean"
+                                        },
+                                        "verified": {
+                                            "type": "boolean"
+                                        },
+                                        "detail": {
+                                            "type": "object",
+                                            "properties": {
+                                                "threshold": {
+                                                    "type": "number"
+                                                },
+                                                "distance": {
+                                                    "type": "number"
+                                                },
+                                                "confidence": {
+                                                    "type": "number"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Face image missing, invalid file type, no face detected, multiple faces detected, or spoof detected.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Session cookie missing or invalid session.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found - No face embedding found for the user.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error - Failed to extract face embedding, error verifying user face embedding, error retrieving user data, or unexpected error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/health": {
+            "get": {
+                "summary": "Health Check",
+                "description": "Check the health status of the API service.",
+                "tags": [
+                    "System"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "API is running.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "status": "API is running."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "sessionCookie": {
+                "type": "apiKey",
+                "in": "cookie",
+                "name": "__session",
+                "description": "Firebase session cookie for user authentication"
+            }
+        },
+        "schemas": {
+            "ErrorResponse": {
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Error message description"
+                    }
+                },
+                "required": [
+                    "error",
+                    "message"
+                ]
+            },
+            "FaceEmbedding": {
+                "type": "array",
+                "items": {
+                    "type": "number"
+                },
+                "description": "Face embedding vector (512 dimensions)",
+                "example": [
+                    0.123,
+                    -0.456,
+                    0.789
+                ]
+            },
+            "VerificationDetail": {
+                "type": "object",
+                "properties": {
+                    "threshold": {
+                        "type": "number",
+                        "description": "Model threshold for verification",
+                        "example": 0.675
+                    },
+                    "distance": {
+                        "type": "number",
+                        "description": "Distance between face embeddings",
+                        "example": 0.234
+                    },
+                    "confidence": {
+                        "type": "number",
+                        "description": "Confidence percentage",
+                        "example": 89.7
+                    }
+                },
+                "required": [
+                    "threshold",
+                    "distance",
+                    "confidence"
+                ]
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "System",
+            "description": "System health and status endpoints"
+        },
+        {
+            "name": "Face Management",
+            "description": "Face embedding registration and retrieval"
+        },
+        {
+            "name": "Attendance Verification",
+            "description": "Face verification for attendance tracking"
+        }
+    ]
+}
