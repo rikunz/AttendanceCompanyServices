@@ -29,6 +29,13 @@ A production-ready facial recognition service for enterprise attendance manageme
 └─────────────────┘    └──────────────────┘    └─────────────────┘
 ```
 
+## 📚 API Documentation
+
+### 🔗 [Complete API Documentation](https://attendance-smart-lab-api.rikunz.tech/deepface.html)
+
+*For detailed endpoint specifications, request/response schemas, and interactive testing, visit our comprehensive API documentation.*
+
+
 ## 📋 Prerequisites
 
 - **Python**: 3.12+
