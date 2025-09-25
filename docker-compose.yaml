@@ -9,3 +9,5 @@ services:
       - ./.env
     volumes:
       - ./logs:/app/logs
+    ports:
+      - "5000:5000"
