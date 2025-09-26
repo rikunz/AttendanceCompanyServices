@@ -44,4 +44,4 @@ COPY . .
 
 EXPOSE 5000
 
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:5000", "--timeout", "120", "--max-requests", "20", "--max-requests-jitter", "5"]
+CMD ["uv", "run", "gunicorn", "app:app", "--bind", "0.0.0.0:5000", "--timeout", "120", "--max-requests", "20", "--max-requests-jitter", "5"]
