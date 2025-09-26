@@ -24,6 +24,8 @@ COPY pyproject.toml uv.lock /app/
 
 RUN uv sync --locked
 
+ENV DEEPFACE_HOME=/app
+
 COPY setup.py constants.py /app/
 
 RUN uv run setup.py
