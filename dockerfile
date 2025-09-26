@@ -9,6 +9,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     build-essential \
     g++ \
+    cmake \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libgomp1 \
+    libgoogle-perftools4 \
+    libgstreamer1.0-0 \
+    libgstreamer-plugins-base1.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 # Download the latest installer
@@ -32,6 +42,6 @@ RUN uv run setup.py
 
 COPY . .
 
-EXPOSE 80
+EXPOSE 5000
 
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:80"]
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:5000"]
