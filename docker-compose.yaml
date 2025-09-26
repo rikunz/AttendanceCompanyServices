@@ -1,6 +1,6 @@
-name: Attendance Service
+name: attendance-service
 services:
-  deepface-api:
+  deepface_api:
     build: .
     # environment:
     #   - DEEPFACE_HOME=$pwd
